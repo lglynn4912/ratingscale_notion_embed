@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notion Rating Widget with Custom Icons</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #ffffff;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .rating-widget {
+            margin-bottom: 30px;
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        h3 {
+            margin-top: 0;
+            color: #37352f;
+            display: flex;
+            align-items: center;
+        }
+        h3 svg {
+            margin-right: 8px;
+        }
+        .rating-options {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            align-items: center;
+            justify-content: center;
+        }
+        .rating-option {
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+            position: relative;
+        }
+        .rating-option:hover {
+            transform: scale(1.2);
+            z-index: 10;
+        }
+        .rating-option.selected {
+            transform: scale(1.35);
+            z-index: 20;
+            filter: drop-shadow(0 0 3px rgba(0,0,0,0.2));
+        }
+        .rating-option:not(.selected) {
+            opacity: 0.5;
+        }
+        .rating-label {
+            margin-top: 10px;
+            font-style: italic;
+            color: #6b6b6b;
+            height: 24px;
+            text-align: center;
+            font-size: 16px;
+        }
+        .save-status {
+            color: #0f9d58;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            height: 20px;
+            text-align: center;
+        }
+        .save-status.visible {
+            opacity: 1;
+        }
+
+        /* SVG styles for custom icons */
+        .icon-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            position: relative;
+        }
+
+        /* Color schemes for ratings */
+        .color-1 { color: #ff5252; } /* Red */
+        .color-2 { color: #ff9800; } /* Orange */
+        .color-3 { color: #fdd835; } /* Yellow */
+        .color-4 { color: #4caf50; } /* Light Green */
+        .color-5 { color: #2e7d32; } /* Dark Green */
+
+        /* Highlight animation */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0,0,0,0); }
+            50% { box-shadow: 0 0 10px 4px rgba(0,0,0,0.1); }
+            100% { box-shadow: 0 0 0 0 rgba(0,0,0,0); }
+        }
+
+        .rating-option.selected .icon-container {
+            animation: pulse 1.5s infinite;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="rating-widget" id="mood-widget">
+            <h3>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                How's your mood today?
+            </h3>
+            <div class="rating-options" data-category="mood">
+                <div class="rating-option" data-value="1">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-1"><circle cx="12" cy="12" r="10"></circle><path d="M16 16s-1.5-2-4-2-4 2-4 2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                    </div>
+                </div>
+                <div class="rating-option" data-value="2">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-2"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="15" x2="16" y2="15"></line><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                    </div>
+                </div>
+                <div class="rating-option" data-value="3">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-3"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                    </div>
+                </div>
+                <div class="rating-option" data-value="4">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-4"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                    </div>
+                </div>
+                <div class="rating-option" data-value="5">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-5"><circle cx="12" cy="12" r="10"></circle><path d="M8 13s1.5 1.5 4 1.5 4-1.5 4-1.5"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line><path d="M8.5 16.5S10 18 12 18s3.5-1.5 3.5-1.5"></path></svg>
+                    </div>
+                </div>
+            </div>
+            <div class="rating-label" id="mood-label"></div>
+            <div class="save-status" id="mood-status">Selected!</div>
+        </div>
+
+        <div class="rating-widget" id="energy-widget">
+            <h3>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="18" height="12" rx="2"></rect><line x1="23" y1="13" x2="23" y2="11"></line></svg>
+                What's your energy level?
+            </h3>
+            <div class="rating-options" data-category="energy">
+                <div class="rating-option" data-value="1">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-1"><rect x="1" y="6" width="18" height="12" rx="2"></rect><line x1="23" y1="13" x2="23" y2="11"></line><line x1="4" y1="10" x2="4" y2="14"></line></svg>
+                    </div>
+                </div>
+                <div class="rating-option" data-value="2">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-2"><rect x="1" y="6" width="18" height="12" rx="2"></rect><line x1="23" y1="13" x2="23" y2="11"></line><line x1="4" y1="10" x2="4" y2="14"></line><line x1="8" y1="10" x2="8" y2="14"></line></svg>
+                    </div>
+                </div>
+                <div class="rating-option" data-value="3">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-3"><rect x="1" y="6" width="18" height="12" rx="2"></rect><line x1="23" y1="13" x2="23" y2="11"></line><line x1="4" y1="10" x2="4" y2="14"></line><line x1="8" y1="10" x2="8" y2="14"></line><line x1="12" y1="10" x2="12" y2="14"></line></svg>
+                    </div>
+                </div>
+                <div class="rating-option" data-value="4">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-4"><rect x="1" y="6" width="18" height="12" rx="2"></rect><line x1="23" y1="13" x2="23" y2="11"></line><line x1="4" y1="10" x2="4" y2="14"></line><line x1="8" y1="10" x2="8" y2="14"></line><line x1="12" y1="10" x2="12" y2="14"></line><line x1="16" y1="10" x2="16" y2="14"></line></svg>
+                    </div>
+                </div>
+                <div class="rating-option" data-value="5">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-5"><rect x="1" y="6" width="18" height="12" rx="2"></rect><line x1="23" y1="13" x2="23" y2="11"></line><line x1="4" y1="10" x2="4" y2="14"></line><line x1="8" y1="10" x2="8" y2="14"></line><line x1="12" y1="10" x2="12" y2="14"></line><line x1="16" y1="10" x2="16" y2="14"></line><line x1="20" y1="10" x2="20" y2="14"></line></svg>
+                    </div>
+                </div>
+            </div>
+            <div class="rating-label" id="energy-label"></div>
+            <div class="save-status" id="energy-status">Selected!</div>
+        </div>
+
+        <div class="rating-widget" id="focus-widget">
+            <h3>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+                How's your focus today?
+            </h3>
+            <div class="rating-options" data-category="focus">
+                <div class="rating-option" data-value="1">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-1"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" opacity="0.2"></path></svg>
+                    </div>
+                </div>
+                <div class="rating-option" data-value="2">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" opacity="0.4"></path></svg>
+                    </div>
+                </div>
+                <div class="rating-option" data-value="3">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-3"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" opacity="0.6"></path></svg>
+                    </div>
+                </div>
+                <div class="rating-option" data-value="4">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-4"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" opacity="0.8"></path></svg>
+                    </div>
+                </div>
+                <div class="rating-option" data-value="5">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+                    </div>
+                </div>
+            </div>
+            <div class="rating-label" id="focus-label"></div>
+            <div class="save-status" id="focus-status">Selected!</div>
+        </div>
+
+        <div class="rating-widget" id="health-widget">
+            <h3>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path></svg>
+                How's your physical health?
+            </h3>
+            <div class="rating-options" data-category="health">
+                <div class="rating-option" data-value="1">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-1"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path><circle cx="11.5" cy="6.5" r="1" fill="currentColor"></circle></svg>
+                    </div>
+                </div>
+                <div class="rating-option" data-value="2">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-2"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path><circle cx="11.5" cy="9" r="1" fill="currentColor"></circle><circle cx="11.5" cy="6.5" r="1" fill="currentColor"></circle></svg>
+                    </div>
+                </div>
+                <div class="rating-option" data-value="3">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-3"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path><circle cx="11.5" cy="11.5" r="1" fill="currentColor"></circle><circle cx="11.5" cy="9" r="1" fill="currentColor"></circle><circle cx="11.5" cy="6.5" r="1" fill="currentColor"></circle></svg>
+                    </div>
+                </div>
+                <div class="rating-option" data-value="4">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-4"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path><circle cx="11.5" cy="14" r="1" fill="currentColor"></circle><circle cx="11.5" cy="11.5" r="1" fill="currentColor"></circle><circle cx="11.5" cy="9" r="1" fill="currentColor"></circle><circle cx="11.5" cy="6.5" r="1" fill="currentColor"></circle></svg>
+                    </div>
+                </div>
+                <div class="rating-option" data-value="5">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-5"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path><circle cx="11.5" cy="16.5" r="1" fill="currentColor"></circle><circle cx="11.5" cy="14" r="1" fill="currentColor"></circle><circle cx="11.5" cy="11.5" r="1" fill="currentColor"></circle><circle cx="11.5" cy="9" r="1" fill="currentColor"></circle><circle cx="11.5" cy="6.5" r="1" fill="currentColor"></circle></svg>
+                    </div>
+                </div>
+            </div>
+            <div class="rating-label" id="health-label"></div>
+            <div class="save-status" id="health-status">Selected!</div>
+        </div>
+
+        <div class="rating-widget" id="hope-widget">
+            <h3>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                How hopeful do you feel?
+            </h3>
+            <div class="rating-options" data-category="hope">
+                <div class="rating-option" data-value="1">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-1"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="none"></path></svg>
+                    </div>
+                </div>
+                <div class="rating-option" data-value="2">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill-opacity="0.25"></path></svg>
+                    </div>
+                </div>
+                <div class="rating-option" data-value="3">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-3"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill-opacity="0.5"></path></svg>
+                    </div>
+                </div>
+                <div class="rating-option" data-value="4">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-4"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill-opacity="0.75"></path></svg>
+                    </div>
+                </div>
+                <div class="rating-option" data-value="5">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="color-5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="currentColor"></path></svg>
+                    </div>
+                </div>
+            </div>
+            <div class="rating-label" id="hope-label"></div>
+            <div class="save-status" id="hope-status">Selected!</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ratingLabels = {
+                mood: {
+                    1: 'Very Low',
+                    2: 'Low',
+                    3: 'Neutral',
+                    4: 'Good',
+                    5: 'Excellent'
+                },
+                energy: {
+                    1: 'Depleted',
+                    2: 'Low Battery',
+                    3: 'Half Charged',
+                    4: 'Good Energy',
+                    5: 'Fully Charged'
+                },
+                focus: {
+                    1: 'Very Distracted',
+                    2: 'Struggling',
+                    3: 'Average',
+                    4: 'Focused',
+                    5: 'Laser Focused'
+                },
+                health: {
+                    1: 'Unwell',
+                    2: 'Below Average',
+                    3: 'Average',
+                    4: 'Good',
+                    5: 'Very Healthy'
+                },
+                hope: {
+                    1: 'Hopeless',
+                    2: 'Pessimistic',
+                    3: 'Neutral',
+                    4: 'Hopeful',
+                    5: 'Very Optimistic'
+                }
+            };
+
+            // Load any saved ratings from localStorage
+            loadSavedRatings();
+
+            const ratingOptions = document.querySelectorAll('.rating-option');
+
+            ratingOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const value = this.getAttribute('data-value');
+                    const category = this.parentElement.getAttribute('data-category');
+                    const widgetId = `${category}-widget`;
+                    const labelId = `${category}-label`;
+                    const statusId = `${category}-status`;
+
+                    // Remove selected class from all options in this category
+                    const categoryOptions = document.querySelectorAll(`#${widgetId} .rating-option`);
+                    categoryOptions.forEach(opt => opt.classList.remove('selected'));
+
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+
+                    // Update label
+                    document.getElementById(labelId).textContent = ratingLabels[category][value];
+
+                    // Show save status briefly
+                    const statusElement = document.getElementById(statusId);
+                    statusElement.classList.add('visible');
+                    setTimeout(() => {
+                        statusElement.classList.remove('visible');
+                    }, 2000);
+
+                    // Save the rating
+                    saveRating(category, value);
+                });
+            });
+
+            function saveRating(category, rating) {
+                // Save to localStorage
+                localStorage.setItem(`rating_${category}`, rating);
+                console.log(`Saved: ${category} = ${rating}`);
+            }
+
+            function loadSavedRatings() {
+                const categories = ['mood', 'energy', 'focus', 'health', 'hope'];
+
+                categories.forEach(category => {
+                    const savedRating = localStorage.getItem(`rating_${category}`);
+                    if (savedRating) {
+                        // Find the option with this value
+                        const option = document.querySelector(`.rating-options[data-category="${category}"] .rating-option[data-value="${savedRating}"]`);
+                        if (option) {
+                            // Simulate a click on this option
+                            option.click();
+                        }
+                    }
+                });
+            }
+        });
+    </script>
