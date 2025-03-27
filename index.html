@@ -329,7 +329,7 @@
                 }
             };
 
-            // Load any saved ratings from localStorage
+            // Load any saved ratings from sessionStorage
             loadSavedRatings();
 
             const ratingOptions = document.querySelectorAll('.rating-option');
@@ -343,47 +343,3 @@
                     const statusId = `${category}-status`;
 
                     // Remove selected class from all options in this category
-                    const categoryOptions = document.querySelectorAll(`#${widgetId} .rating-option`);
-                    categoryOptions.forEach(opt => opt.classList.remove('selected'));
-
-                    // Add selected class to clicked option
-                    this.classList.add('selected');
-
-                    // Update label
-                    document.getElementById(labelId).textContent = ratingLabels[category][value];
-
-                    // Show save status briefly
-                    const statusElement = document.getElementById(statusId);
-                    statusElement.classList.add('visible');
-                    setTimeout(() => {
-                        statusElement.classList.remove('visible');
-                    }, 2000);
-
-                    // Save the rating
-                    saveRating(category, value);
-                });
-            });
-
-            function saveRating(category, rating) {
-                // Save to localStorage
-                localStorage.setItem(`rating_${category}`, rating);
-                console.log(`Saved: ${category} = ${rating}`);
-            }
-
-            function loadSavedRatings() {
-                const categories = ['mood', 'energy', 'focus', 'health', 'hope'];
-
-                categories.forEach(category => {
-                    const savedRating = localStorage.getItem(`rating_${category}`);
-                    if (savedRating) {
-                        // Find the option with this value
-                        const option = document.querySelector(`.rating-options[data-category="${category}"] .rating-option[data-value="${savedRating}"]`);
-                        if (option) {
-                            // Simulate a click on this option
-                            option.click();
-                        }
-                    }
-                });
-            }
-        });
-    </script>
